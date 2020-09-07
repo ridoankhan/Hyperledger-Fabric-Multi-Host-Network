@@ -112,7 +112,6 @@ services:
   
   ca.org1.example.com:
     image: hyperledger/fabric-ca:$IMAGE_TAG
-    # restart: always
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org1
@@ -127,7 +126,6 @@ services:
 
   ca.org2.example.com:
     image: hyperledger/fabric-ca:$IMAGE_TAG
-    # restart: always
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org2
@@ -139,5 +137,3 @@ services:
     volumes:
       - ./channel/crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server
     container_name: ca_peerOrg2
-    networks:
-      - fabric_net
