@@ -1,0 +1,7 @@
+docker-compose -f docker-compose-ca.yaml up -d rca-org2
+
+sudo chown -R user:user crypto-config/*
+
+chmod +x regOrg2Ca.sh
+
+./regOrg2Ca.sh

@@ -1,0 +1,67 @@
+docker-compose -f docker-compose-ca.yaml up -d ca-tls rca-org0
+
+sudo chown -R di:di crypto-config/*
+
+chmod +x regTlsCa.sh
+
+./regTlsCa.sh
+
+chmod +x regOrg0Ca.sh
+
+./regOrg0Ca.sh
+
+chmod +x enrollOrdererOne.sh
+
+./enrollOrdererOne.sh
+
+chmod +x enrollOrdererFive.sh 
+
+./enrollOrdererFive.sh
+
+chmod +x enrollOrdererAdmin.sh
+
+./enrollOrdererAdmin.sh
+
+chmod +x enrollOrdererTwo.sh 
+
+./enrollOrdererTwo.sh
+
+chmod +x enrollOrdererThree.sh 
+
+./enrollOrdererThree.sh
+
+chmod +x enrollOrdererFour.sh 
+
+./enrollOrdererFour.sh
+
+chmod +x enrollPeer0Org1.sh 
+
+./enrollPeer0Org1.sh
+
+chmod +x enrollPeer1Org1.sh 
+
+./enrollPeer1Org1.sh
+
+sudo chmod +x enrollOrg1Admin.sh
+
+chmod +x enrollPeer0Org2.sh 
+
+./enrollPeer0Org2.sh
+
+chmod +x enrollPeer1Org2.sh 
+
+./enrollPeer1Org2.sh
+
+chmod +x enrollOrg2Admin.sh 
+
+./enrollOrg2Admin.sh
+
+
+configtxgen -profile SampleMultiNodeEtcdRaft -outputBlock ${PWD}/channel-artifacts/genesis.block -channelID syschannel
+
+
+configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ${PWD}/channel-artifacts/channel.tx -channelID mychannel
+
+configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ${PWD}/channel-artifacts/org1MSPanchors.tx -channelID mychannel -asOrg Org1MSP
+
+configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ${PWD}/channel-artifacts/org2MSPanchors.tx -channelID mychannel -asOrg Org2MSP

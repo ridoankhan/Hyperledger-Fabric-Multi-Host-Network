@@ -1,0 +1,295 @@
+
+ #
+ # [Required]. A connection profile contains information about a set of network
+ # components. It is typically used to configure gateway, allowing applications
+ # interact with a network channel without worrying about the underlying
+ # topology. A connection profile is normally created by an administrator who
+ # understands this topology.
+ #
+ name: "aid-distribution"
+ #
+ # [Optional]. Analogous to HTTP, properties with an "x-" prefix are deemed
+ # "application-specific", and ignored by the gateway. For example, property
+ # "x-type" with value "hlfv1" was originally used to identify a connection
+ # profile for Fabric 1.x rather than 0.x.
+ #
+ x-type: "hlfv1"
+ #
+ # [Required]. A short description of the connection profile
+ #
+ description: "Connection profile for aid disribution network"
+ #
+ # [Required]. Connection profile schema version. Used by the gateway to
+ # interpret these data.
+ #
+ version: "1.0"
+ #
+ # [Optional]. A logical description of each network channel; its peer and
+ # orderer names and their roles within the channel. The physical details of
+ # these components (e.g. peer IP addresses) will be specified later in the
+ # profile; we focus first on the logical, and then the physical.
+ #
+ channels:
+   #
+   # [Optional]. papernet is the only channel in this connection profile
+   #
+   mychannel:
+     #
+     # [Optional]. Channel orderers for PaperNet. Details of how to connect to
+     # them is specified later, under the physical "orderers:" section
+     #
+     orderers:
+     #
+     # [Required]. Orderer logical name
+     #
+       - orderer.example.com
+       - orderer2.example.com
+       - orderer3.example.com
+       - orderer4.example.com
+       - orderer5.example.com
+     #
+     # [Optional]. Peers and their roles
+     #
+     peers:
+     #
+     # [Required]. Peer logical name
+     #
+       peer0.org1.example.com:
+         #
+         # [Optional]. Is this an endorsing peer? (It must have chaincode
+         # installed.) Default: true
+         #
+         endorsingPeer: true
+         #
+         # [Optional]. Is this peer used for query? (It must have chaincode
+         # installed.) Default: true
+         #
+         chaincodeQuery: true
+         #
+         # [Optional]. Is this peer used for non-chaincode queries? All peers
+         # support these types of queries, which include queryBlock(),
+         # queryTransaction(), etc. Default: true
+         #
+         ledgerQuery: true
+         #
+         # [Optional]. Is this peer used as an event hub? All peers can produce
+         # events. Default: true
+         #
+         eventSource: true
+       #
+       peer1.org1.example.com:
+         endorsingPeer: false
+         chaincodeQuery: true
+         ledgerQuery: true
+         eventSource: true
+       #
+       peer0.org2.example.com:
+         endorsingPeer: true
+         chaincodeQuery: true
+         ledgerQuery: true
+         eventSource: true
+       #
+       peer1.org2.example.com:
+         endorsingPeer: false
+         chaincodeQuery: true
+         ledgerQuery: false
+         eventSource: false
+ #
+ # [Required]. List of organizations for all channels. At least one organization
+ # is required.
+ #
+ organizations:
+    #
+    # [Required]. Organizational information for MagnetoCorp
+    #
+   Org1:
+     #
+     # [Required]. The MSPID used to identify MagnetoCorp
+     #
+     mspid: Org1MSP
+     #
+     # [Required]. The MagnetoCorp peers
+     #
+     peers:
+       - peer0.org1.example.com
+       - peer1.org1.example.com
+     #
+     # [Optional]. Fabric-CA Certificate Authorities.
+     #
+     certificateAuthorities:
+       - ca-org1
+
+     # [Optional]. If the application is going to make requests that are reserved to organization
+     # administrators, including creating/updating channels, installing/instantiating chaincodes, it
+     # must have access to the admin identity represented by the private key and signing certificate.
+     # Both properties can be the PEM string or local path to the PEM file. Note that this is mainly for
+     # convenience in development mode, production systems should not expose sensitive information
+     # this way. The SDK should allow applications to set the org admin identity via APIs, and only use
+     # this route as an alternative when it exists.
+     adminPrivateKey:
+       path: ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk
+     signedCert:
+       path: ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+
+   #
+   # [Optional]. Organizational information for DigiBank
+   #
+   Org2:
+     mspid: Org2MSP
+     peers:
+       - peer0.org2.example.com
+       - peer1.org2.example.com
+     certificateAuthorities:
+       - ca-org2
+     adminPrivateKey:
+       path: ./crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/priv_sk
+     signedCert:
+       path: ./crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
+
+ #
+ # [Optional]. Orderer physical information, by orderer name
+ #
+ orderers:
+   #
+   # [Required]. Name of MagnetoCorp orderer
+   #
+   orderer.example.com:
+     #
+     # [Required]. This orderer's IP address
+     #
+     url: grpc://115.127.8.83:7050
+     #
+     # [Optional]. gRPC connection properties used for communication
+     #
+     grpcOptions:
+       ssl-target-name-override: orderer.example.com
+     tlsCACerts:
+       path: ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+
+
+   orderer2.example.com:
+     url: grpc://115.127.8.84:8050
+     grpcOptions:
+       ssl-target-name-override: orderer2.example.com
+     tlsCACerts:
+       path: artifacts/channel/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/ca.crt
+
+
+   orderer3.example.com:
+     url: grpc://115.127.8.85:9050
+     grpcOptions:
+       ssl-target-name-override: orderer3.example.com
+     tlsCACerts:
+       path: artifacts/channel/crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/ca.crt
+
+
+   orderer4.example.com:
+     url: grpc://115.127.8.85:10050
+     grpcOptions:
+       ssl-target-name-override: orderer4.example.com
+     tlsCACerts:
+       path: artifacts/channel/crypto-config/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/ca.crt
+
+
+   orderer5.example.com:
+     url: grpc://115.127.8.83:11050
+     grpcOptions:
+       ssl-target-name-override: orderer5.example.com
+     tlsCACerts:
+       path: artifacts/channel/crypto-config/ordererOrganizations/example.com/orderers/orderer5.example.com/tls/ca.crt
+
+ #
+ # [Required]. Peer physical information, by peer name. At least one peer is
+ # required.
+ #
+ peers:
+   #
+   # [Required]. First MagetoCorp peer physical properties
+   #
+   peer0.org1.example.com:
+     #
+     # [Required]. Peer's IP address
+     #
+     url: grpc://115.127.8.83:7051
+     #
+     # [Optional]. gRPC connection properties used for communication
+     #
+     grpcOptions:
+       ssl-target-name-override: peer0.org1.example.com
+       request-timeout: 120001
+     tlsCACerts:
+       path: ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+
+       
+   #
+   # [Optional]. Other MagnetoCorp peers
+   #
+   peer1.org1.example.com:
+     url: grpc://115.127.8.84:8051
+     grpcOptions:
+       ssl-target-name-override: peer1.org1.example.com
+       request-timeout: 120001
+     tlsCACerts:
+       path: ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
+   #
+   peer0.org2.example.com:
+     url: grpc://115.127.8.85:9051
+     grpcOptions:
+       ssl-target-name-override: peer0.org2.example.com
+       request-timeout: 120001
+     tlsCACerts:
+       path: ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org2.example.com/tls/ca.crt
+  #
+  # [Required]. Digibank peer physical properties
+  #
+   peer1.org2.example.com:
+     url: grpc://115.127.8.84:10051
+     grpcOptions:
+       ssl-target-name-override: peer1.org2.example.com
+       request-timeout: 120001
+     tlsCACerts:
+      path: ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org2.example.com/tls/ca.crt
+ #
+ # [Optional]. Fabric-CA Certificate Authority physical information, by name.
+ # This information can be used to (e.g.) enroll new users. Communication is via
+ # REST, hence options relate to HTTP rather than gRPC.
+ #
+ certificateAuthorities:
+   #
+   # [Required]. MagnetoCorp CA
+   #
+   ca-org1:
+     #
+     # [Required]. CA IP address
+     #
+     url: http://115.127.8.83:7054
+     #
+     # [Optioanl]. HTTP connection properties used for communication
+     #
+     httpOptions:
+       verify: false
+     tlsCACerts:
+       path: ./crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem
+
+     #
+     # [Optional]. Fabric-CA supports Certificate Signing Requests (CSRs). A
+    # registrar is needed to enroll new users.
+     #
+     registrar:
+       - enrollId: admin
+         enrollSecret: adminpw
+     #
+     # [Optional]. The name of the CA.
+     #
+     caName: ca-org1
+
+   ca-org2:
+     url: http://115.127.8.85:8054
+     httpOptions:
+       verify: false
+     tlsCACerts:
+       path: ./crypto-config/peerOrganizations/org2.example.com/ca/ca.org2.example.com-cert.pem
+     registrar:
+       - enrollId: admin
+         enrollSecret: adminpw
+     caName: ca-org2

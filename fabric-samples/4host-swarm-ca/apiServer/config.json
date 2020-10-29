@@ -1,0 +1,12 @@
+{
+    "connection_file": "connection-profile.json",
+    "appAdmin": "admin-org1",
+    "appAdminSecret": "org1AdminPW",
+    "orgMSPID": "Org1MSP",
+    "caName": "rca-org1",
+    "userName": "admin-org1",
+    "gatewayDiscovery": {
+        "enabled": false,
+        "asLocalhost": true
+    }
+}

@@ -1,0 +1,24 @@
+docker exec cli peer lifecycle chaincode package fabcar.tar.gz --path ../chaincode/fabcar/go/ --label fabcar_1
+
+docker exec cli peer lifecycle chaincode package fabcar.tar.gz --path ${PWD}/../chaincode/fabcar/javascript/ --lang node --label fabcar_1
+
+pushd ../chaincode/fabcar/go
+GO111MODULE=on go mod vendor
+popd
+
+
+Command to install fabcar chaincode is:
+
+docker exec cli peer lifecycle chaincode package fabcar.tar.gz --path ../../../chaincode/fabcar/javascript/ --lang node --label fabcar_1
+
+
+docker exec cli peer chaincode invoke -o orderer2.example.com:8050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n fabcar --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["initLedger"]}'
+
+
+fabcar_1:e0dd346c28be8af8e879dfb88994ff92d0da02a60682ba49534a6f35f6549a9f
+
+aidDistribution_1:57ee60c8197e03c9ab9d452fa32054b165bcbbdb73a284d7f0e4530bf1b7bfc9
+
+docker exec cli peer chaincode invoke -o orderer3.example.com:9050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n aidDistribution --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["initLedger"]}'
+
+docker exec cli peer chaincode query -n aidDistribution -C mychannel -c '{"Args":["queryAid","AID0"]}'

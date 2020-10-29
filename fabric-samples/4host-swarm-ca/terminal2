@@ -1,0 +1,9 @@
+docker-compose -f docker-compose-ca.yaml up -d rca-org1
+
+sudo chown -R rakib:rakib crypto-config/*
+
+chmod +x regOrg1Ca.sh
+
+./regOrg1Ca.sh
+
+chmod +x enrollOrdererTwo.sh
